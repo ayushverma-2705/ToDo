@@ -1,0 +1,69 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do App</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<!-- header starts here -->
+<div id="facebook-Bar">
+    <div id="facebook-Frame">
+        <div id="logo"> <a href=""> To Do App </a> </div>
+    </div>
+</div>
+
+
+
+<body role="document" style="height: 100%">
+    <br>
+    <div class="loginform">
+        <button onclick="addToDoButton();" class = "radius title">   Create ToDo </button>
+    </div>
+    <br>
+    <div class="loginform">
+        <form id="addTaskForm"  method="post" style="display:none;">
+            <p>
+                <input type="text" id="title" name="title" placeholder="Title" value="" class="radius" required/>
+            </p>
+            <p>
+                <input type="text" id="description" name="description" placeholder="Description" value="" class="radius" required/>
+            </p>
+            <p>
+                <button type="button" onclick = "cancelToDo();"class="radius title" name="todo">Cancel</button>
+                <button type="button" onclick = "addToDo();"class="radius title" name="todo">Add To Do</button>
+            </p>
+            <br>
+        </form>
+    </div>
+    <br>
+
+    <div class="row loginform" style="margin-right: 0;margin-left: 0">
+        <div class="col-md-4" id="pending">
+            UnAssigned ToDo's
+        </div>
+        <div class="col-md-4" id="progress">
+            In Progress ToDo's
+        </div>
+        <div class="col-md-4" id="completed">
+            Completed ToDo's
+        </div>
+    </div>
+    <script src="homeIndex.js" type = "application/javascript" > </script>
+
+</body>
+<!--<body class="home">-->
+<!--nb,bnjdwjkjbnnjksbljnvlbj-->
+<!--</body>-->
+
+
+</html>
+
