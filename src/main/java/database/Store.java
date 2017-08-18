@@ -41,6 +41,10 @@ public class Store {
         return instance;
     }
 
+    public void removeUserLogin(String cookie) {
+        loginAccounts.remove(cookie);
+    }
+
 
     public boolean checkUsername(String username) {
         return registeredUsers.containsKey(username);

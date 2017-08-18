@@ -5,6 +5,7 @@ todo/FetchTodoService$2.class
 todo/AssignService.class
 controller/LoginController.class
 todo/FetchTodoService$4.class
+controller/LogOutController.class
 todo/FetchTodoService.class
 user/User.class
 todo/FetchTodoService$3.class
@@ -13,6 +14,7 @@ todo/FetchTodoService$6.class
 database/Store.class
 todo/FetchTodoService$1.class
 controller/RegisterController.class
+todo/LogOutService.class
 todo/FetchTodoService$5.class
 todo/RegisterService.class
 todo/CheckLogin.class

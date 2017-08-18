@@ -64,7 +64,7 @@
                     <input type="email" id="email" name="email" placeholder="Email" class="radius" required />
                 </p>
                 <p>
-                    <input type="tel" id="phone" name="phone" placeholder="Phone" class="radius" required />
+                    <input type="tel" id="phone" name="phone" placeholder="Phone" class="radius" required pattern=".{10}" />
                 </p>
                 <p>
                     <input type="submit" class="fbbutton" name="signup" value="Sign Up for To Do App">

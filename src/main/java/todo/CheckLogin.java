@@ -15,6 +15,11 @@ public class CheckLogin {
         Cookie[]  cookie = request.getCookies();
 
         System.out.println(" sjkbdhbjsvbhjnz ");
+
+        if (cookie == null) {
+            return false;
+        }
+
         try {
             System.out.println(" IN trying;");
             for (Cookie cur : cookie) {

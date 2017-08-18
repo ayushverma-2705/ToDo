@@ -1,4 +1,5 @@
 /Users/ayush.v/Desktop/ToDo/src/main/java/controller/LoginController.java
+/Users/ayush.v/Desktop/ToDo/src/main/java/controller/LogOutController.java
 /Users/ayush.v/Desktop/ToDo/src/main/java/controller/ModifyController.java
 /Users/ayush.v/Desktop/ToDo/src/main/java/database/Store.java
 /Users/ayush.v/Desktop/ToDo/src/main/java/todo/Todo.java
@@ -12,3 +13,4 @@
 /Users/ayush.v/Desktop/ToDo/src/main/java/controller/RegisterController.java
 /Users/ayush.v/Desktop/ToDo/src/main/java/todo/LoginService.java
 /Users/ayush.v/Desktop/ToDo/src/main/java/todo/Pair.java
+/Users/ayush.v/Desktop/ToDo/src/main/java/todo/LogOutService.java

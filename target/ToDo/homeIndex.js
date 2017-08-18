@@ -17,6 +17,8 @@ function createIt(id, title, description, name, date, assignTo, assignBy, status
         str += "<td ><input onclick = \"assign(" +  id  + "," + status + ");\" type=\"submit\" class=\"fbbutton\" name=\"login\" value=\"Shift\" /></td></tr></form>";
     }
 
+  //  str += "<td ><input onclick = \"deleteIt(" +  id  + "," + status + ");\" type=\"submit\" class=\"fbbutton\" name=\"login\" value=\"Delete\" /></td></tr></form>";
+
     str += "</table></h4></div>";
 
     str += "<div id=\"q" + id + "\" class=\"panel-collapse collapse in\">";
@@ -238,6 +240,7 @@ function getLists() {
             console.log("Window Date Updated ", window.date);
 
             displayIt(window.lastUnassigned, window.lastAssigned, window.lastCompleted);
+            //cancelToDo();
         } else if (http.status != 200) {
             document.body.innerHTML = http.responseText;
         }
@@ -339,3 +342,36 @@ function assign(id, status) {
     http.send(params);
 }
 
+function deleteIt() {}
+
+/*
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
+var delete_cookie = function(name) {
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+};
+
+function logOut() {
+    var temp_cookie = getCookie("session-id");
+    delete_cookie("session-id");
+
+    var url = "/ToDo/logOut";
+    var http = new XMLHttpRequest();
+
+    var params = "&Cookie=" + temp_cookie;
+
+    http.open("GET", url + "?" + params , true);
+
+    http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+
+        }
+    }
+
+    http.send(null);
+}
+*/
