@@ -44,6 +44,7 @@ public class MainController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        System.out.println("In GET MAIN Controller");
         FetchTodoService.fetchIT(request, response);
     }
 

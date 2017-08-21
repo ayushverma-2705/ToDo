@@ -1,23 +1,33 @@
+
 function createIt(id, title, description, name, date, assignTo, assignBy, status) {
     var str = "<div class=\"panel panel-default\">";
     str += "<div class=\"panel-heading\">";
-    str += "<h4 class=\"panel-title\">";
+    str += "<h4 class=\"panel-title \">";
 
 
-    str += "<table border=\"0\" style=\"border:none\">";
-    str += "<tr><td><a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#q" + id + "\">" + title + "</a></td>";
+    str += "<table border=\"0\" style=\"width: 100%;border:none\">";
+    str += "<tr><td class=\"col-md-3\"><a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#q" + id + "\">" + title + "</a></td>";
 
-    if (status < 2) {
-        str += "<form method=\"post\" name=\"login_form\">";
+    var left = 9;
 
-        if (status === 0) {
-            str += "<td ><input type=\"text\" tabindex=\"1\"  id=\"" + id + "_input\" placeholder=\"Assign To\"  class=\"inputtext radius1\"  required></td>";
-        }
-
-        str += "<td ><input onclick = \"assign(" +  id  + "," + status + ");\" type=\"submit\" class=\"fbbutton\" name=\"login\" value=\"Shift\" /></td></tr></form>";
+    if ((status === 0) || (status === 2)) {
+        left -= 3;
+        str += "<td class=\"col-md-3\"><input onclick = \"deleteIt(" +  id  + "," + status + ");\" type=\"submit\" class=\"fbbutton\" name=\"login\" value=\"Delete\" /></td>";
     }
 
-  //  str += "<td ><input onclick = \"deleteIt(" +  id  + "," + status + ");\" type=\"submit\" class=\"fbbutton\" name=\"login\" value=\"Delete\" /></td></tr></form>";
+    if (status < 2) {
+        str += "<form method=\"post\" name=\"login_form\" style = \"float: right;\">";
+
+        if (status === 0) {
+            str += "<td class=\"col-md-3\"><input type=\"text\" tabindex=\"1\"  id=\"" + id + "_input\" placeholder=\"Assign To\"  class=\"inputtext radius1\"  required></td>";
+            left -= 3;
+        }
+
+        str += "<td class=\"col-md-" + left + "\"><input onclick = \"assign(" +  id  + "," + status + ");\" type=\"submit\" class=\"fbbutton\" name=\"login\" value=\"Shift\" style = \"float: right;\"/></td>";
+    }
+
+    str += "</tr></form>";
+  //  str += "<td class=\"col-md-3\"><input onclick = \"deleteIt(" +  id  + "," + status + ");\" type=\"submit\" class=\"fbbutton\" name=\"login\" value=\"Delete\" /></td></tr></form>";
 
     str += "</table></h4></div>";
 
@@ -38,6 +48,7 @@ function createIt(id, title, description, name, date, assignTo, assignBy, status
 
     return str;
 }
+
 
 function displayIt(arrUnassigned, arrAssigned, arrCompleted) {
     console.log("  In Java Script of Displaying ToDo's ");
@@ -82,7 +93,7 @@ function displayIt(arrUnassigned, arrAssigned, arrCompleted) {
     });
 }
 
-function updateLast(UpUnassigned, UpAssigned, UpCompleted) {
+function updateLast(UpUnassigned, UpAssigned, UpCompleted, UpDeleted) {
     console.log(" In update Last  ");
     console.log(" Found UpUnassigned :-- " , UpUnassigned);
     console.log(" Found UpAssigned :-- " , UpAssigned);
@@ -195,12 +206,60 @@ function updateLast(UpUnassigned, UpAssigned, UpCompleted) {
         }
     }
 
+    for (var j in UpDeleted) {
+        var index = -1;
+        var found = false;
+
+        for (var i in window.lastUnassigned) {
+            index = index + 1;
+            if (window.lastUnassigned[i]["tId"] === UpDeleted[j]) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found === true) {
+            //console.log(" Found in last Unassigned at index", index);
+            window.lastUnassigned.splice(index, 1);
+        }
+
+        index = -1;
+        found = false;
+
+        for (var i in window.lastAssigned) {
+            index = index + 1;
+            if (window.lastAssigned[i]["tId"] === UpDeleted[j]) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found === true) {
+          //  console.log(" Found in last Assigned at index", index);
+            window.lastAssigned.splice(index, 1);
+        }
+
+        found = false;
+        index = -1;
+
+        for (var i in window.lastCompleted) {
+            index = index + 1;
+
+            if (window.lastCompleted[i]["tId"] === UpDeleted[j]) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found === true) {
+            window.lastCompleted.splice(index, 1);
+        }
+    }
+
     console.log("After Completion");
     console.log(" Found window.lastUnassigned :-- " , window.lastUnassigned);
     console.log(" Found window.lastAssigned :-- " , window.lastAssigned);
     console.log(" Found window.lastCompleted :-- " , window.lastCompleted);
-
-
 }
 
 
@@ -221,6 +280,7 @@ function getLists() {
             UpUnassigned = []
             UpAssigned = []
             UpCompleted = []
+            UpDeleted = []
 
 
             if (window.lastUnassigned === undefined) {
@@ -232,8 +292,9 @@ function getLists() {
             UpUnassigned = JSON.parse(data["pending"]);
             UpAssigned = JSON.parse(data["progress"]);
             UpCompleted = JSON.parse(data["completed"]);
+            UpDeleted = JSON.parse(data["deleted"]);
 
-            updateLast(UpUnassigned, UpAssigned, UpCompleted);
+            updateLast(UpUnassigned, UpAssigned, UpCompleted, UpDeleted);
 
             window.date = data["Date"];
 
@@ -242,7 +303,7 @@ function getLists() {
             displayIt(window.lastUnassigned, window.lastAssigned, window.lastCompleted);
             //cancelToDo();
         } else if (http.status != 200) {
-            document.body.innerHTML = http.responseText;
+            window.location="http://localhost:8080/ToDo";
         }
 
     }
@@ -335,14 +396,61 @@ function assign(id, status) {
             console.log("Inside Assign response");
             getLists();
         } else if(http.status != 200){
-          document.body.innerHTML = http.responseText;
+         // document.body.innerHTML = http.responseText;
+          //window.location="172.16.68.56:8080/ToDo";
+
+          getLists();
+          document.getElementById("mydiv").innerHTML = http.responseText;
+
+          var fade_out = function() {
+            console.log("in visibility setter");
+            document.getElementById("mydiv").style.visibility="hidden";
+          }
+
+          setTimeout(fade_out, 1000);
+        //  console.log("got 400");
       }
     }
 
     http.send(params);
 }
 
-function deleteIt() {}
+function deleteIt(id, status) {
+    var params = "todoid=" + tId + "&status=" + status;
+
+    var http = new XMLHttpRequest();
+    http.open("post", "/ToDo/delete", true);
+
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    var index = -1;
+    var obj = null;
+
+    http.onreadystatechange = function() {
+        if(http.readyState == 4 && http.status == 200) {
+            console.log("Inside Delete response");
+            getLists();
+        } else if(http.status != 200){
+            getLists();
+            document.getElementById("mydiv").innerHTML = http.responseText;
+
+          var fade_out = function() {
+            console.log("in visibility setter");
+            document.getElementById("mydiv").style.visibility="hidden";
+          }
+
+          setTimeout(fade_out, 1000);
+        //  console.log("got 400");
+         // document.body.innerHTML = http.responseText;
+          //window.location="172.16.68.56:8080/ToDo";
+        //  console.log("got 400");
+      }
+    }
+
+    http.send(params);
+
+
+}
 
 /*
 function getCookie(name) {

@@ -23,7 +23,7 @@ public class FetchTodoService {
     public static void notLoggedIn(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         PrintWriter writer = response.getWriter();
 
-        response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.setHeader("Content-Type", "text/html");
         writer.print("<a href=\"/ToDo\">Login/Register before :)</a>");
 
@@ -33,8 +33,10 @@ public class FetchTodoService {
 
 
     public static void fetchIT(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        System.out.println(" In Fetch It");
         if (CheckLogin.checkLogin(request, response)) {
             PrintWriter writer = response.getWriter();
+            System.out.println(" LOGGED IN !!!");
 
             response.setContentType("application/json");
 
@@ -44,6 +46,7 @@ public class FetchTodoService {
             JsonArray pendingArray;
             JsonArray progressArray;
             JsonArray completedArray;
+            JsonArray deleteArray;
 
             if (!(req_date.equals("undefined"))) {
                 DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);  //change the format
@@ -79,6 +82,7 @@ public class FetchTodoService {
                 ArrayList<Todo> UpPending = new ArrayList<Todo>();
                 ArrayList<Todo> UpProgess = new ArrayList<Todo>();
                 ArrayList<Todo> UpComplete = new ArrayList<Todo>();
+                ArrayList<Integer> UpDelete = new ArrayList<Integer>();
 
                 for (Integer tid : set) {
                     if (obj.foundInPending(tid)) {
@@ -87,15 +91,20 @@ public class FetchTodoService {
                     } else if (obj.foundInProgress(tid)) {
                         System.out.println(tid + " Found in progress");
                         UpProgess.add(obj.fromProgress(tid));
-                    } else {
+                    } else if (obj.foundInCompleted(tid))  {
                         System.out.println(tid + " Found in complete");
                         UpComplete.add(obj.fromComplete(tid));
+                    }
+                    else {
+                        System.out.println(tid + " Found in delete");
+                        UpDelete.add(tid);
                     }
                 }
 
                 pendingArray = (JsonArray) new Gson().toJsonTree(UpPending, new TypeToken<List<Todo>>() { }.getType());
                 progressArray = (JsonArray) new Gson().toJsonTree(UpProgess, new TypeToken<List<Todo>>() { }.getType());
                 completedArray = (JsonArray) new Gson().toJsonTree(UpComplete, new TypeToken<List<Todo>>() { }.getType());
+                deleteArray = (JsonArray) new Gson().toJsonTree(UpDelete).getAsJsonArray();
 
             } else {
                 System.out.println(" Date is Undefined");
@@ -106,6 +115,10 @@ public class FetchTodoService {
                 completedArray = (JsonArray) new Gson().toJsonTree(obj.getCompletedToDo(), new TypeToken<List<Todo>>() {
                 }.getType());
 
+                ArrayList<Integer> UpDelete = new ArrayList<Integer>();
+                deleteArray = (JsonArray) new Gson().toJsonTree(UpDelete).getAsJsonArray();
+//
+//                deleteArray = (JsonArray) new Gson().toJsonTree(UpDelete, new TypeToken<List<Integer>>() { }.getType());
 
             }
 
@@ -133,6 +146,12 @@ public class FetchTodoService {
             }
 
             try {
+                totalList.put("deleted", deleteArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
                 totalList.put("Date", (new Date()).toString());
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -150,7 +169,7 @@ public class FetchTodoService {
             return;
         } else {
             System.out.println("Login Failed !!!");
-//            notLoggedIn(request, response);
+            notLoggedIn(request, response);
             //response.sendRedirect("request.getContextPath()");
 
             return;

@@ -241,4 +241,54 @@ public class Store {
 
         return null;
     }
+
+    public boolean removeToDo(long todoId, int status) {
+        if (status == 0) {
+            int index = -1;
+            boolean found = false;
+
+            for (int i = 0; i < pendingToDo.size(); ++i) {
+                ++index;
+                if (pendingToDo.get(i).gettId() == todoId) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found == true) {
+                pendingToDo.remove(index);
+            }
+
+            return found;
+        } else {
+            int index = -1;
+            boolean found = false;
+
+            for (int i = 0; i < completedToDo.size(); ++i) {
+                ++index;
+                if (completedToDo.get(i).gettId() == todoId) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found == true) {
+                completedToDo.remove(index);
+            }
+
+            return found;
+        }
+    }
+
+    public boolean foundInCompleted(Integer tid) {
+        long Tid = (long) tid;
+
+        for (Todo todo : completedToDo) {
+            if (todo.gettId() == Tid) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
